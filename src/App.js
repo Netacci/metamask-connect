@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Modal from './components/Modal';
+import Navbar from './components/Navbar';
+import Web3 from 'web3';
+import { Web3ReactProvider } from '@web3-react/core';
+import { MetaMaskWalletProvider } from './context/MetaMaskWalletContext';
 
-function App() {
+const App = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const getLibrary = (provider) => {
+    return new Web3(provider);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <MetaMaskWalletProvider>
+          <Navbar openModal={() => setModalOpen(true)} />
+          <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+        </MetaMaskWalletProvider>
+      </Web3ReactProvider>
+    </>
   );
-}
+};
 
 export default App;
